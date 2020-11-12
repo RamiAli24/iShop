@@ -26,11 +26,9 @@ const slice = createSlice({
   },
 });
 
-const {
-  USER_LOGIN_REQUEST,
-  USER_LOGIN_SUCCESS,
-  USER_LOGIN_FAILED,
-} = slice.actions;
+const { USER_LOGIN_REQUEST, USER_LOGIN_FAILED } = slice.actions;
+
+export const { USER_LOGIN_SUCCESS } = slice.actions;
 export default slice.reducer;
 
 // Actions

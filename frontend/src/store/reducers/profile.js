@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { USER_LOGIN_SUCCESS } from "./auth";
 
 const slice = createSlice({
   name: "profile",
@@ -8,6 +9,7 @@ const slice = createSlice({
     user: {},
     error: null,
     success: false,
+    update: {},
   },
   reducers: {
     USER_PROFILE_REQUEST: (profile, action) => {
@@ -21,17 +23,22 @@ const slice = createSlice({
       profile.loading = false;
       profile.error = action.payload;
     },
-    USER_UPDATE_REQUEST: (update, action) => {
-      update.loading = true;
+
+    //USER PROFILE UPDATE
+    USER_UPDATE_REQUEST: (profile, action) => {
+      profile.update.loading = true;
     },
-    USER_UPDATE_SUCCESS: (update, action) => {
-      update.loading = false;
-      update.success = true;
-      update.user = action.payload;
+    USER_UPDATE_SUCCESS: (profile, action) => {
+      profile.update.loading = false;
+      profile.update.success = true;
+      profile.update.user = action.payload;
     },
-    USER_UPDATE_FAILED: (update, action) => {
-      update.loading = false;
-      update.error = action.payload;
+    USER_UPDATE_FAILED: (profile, action) => {
+      profile.update.loading = false;
+      profile.update.error = action.payload;
+    },
+    USER_UPDATE_RESET: (profile, action) => {
+      profile.update = {};
     },
   },
 });
@@ -44,7 +51,7 @@ const {
   USER_UPDATE_FAILED,
 } = slice.actions;
 
-export const { USER_PROFILE_SUCCESS } = slice.actions; // we use it in the admin reducer after dispatching a user update via admin
+export const { USER_PROFILE_SUCCESS, USER_UPDATE_RESET } = slice.actions; // we use it in the admin reducer after dispatching a user update via admin
 export default slice.reducer;
 
 // Actions
@@ -59,6 +66,13 @@ export const getUserDetails = () => async (dispatch, getState) => {
       type: USER_PROFILE_SUCCESS.type,
       payload: data,
     });
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS.type,
+      payload: data,
+    });
+
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_PROFILE_FAILED.type,

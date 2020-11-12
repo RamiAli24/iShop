@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col, Alert, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDetails, updateUserDetails } from "../store/reducers/profile";
+import {
+  getUserDetails,
+  updateUserDetails,
+  USER_UPDATE_RESET,
+} from "../store/reducers/profile";
 import { listMyOrders } from "../store/reducers/myOrders";
 import { LinkContainer } from "react-router-bootstrap";
 import Meta from "../components/meta";
@@ -14,8 +18,11 @@ const ProfileScreen = () => {
   const [message, setMessage] = useState(null);
   const dispatch = useDispatch();
 
-  const userProfile = useSelector((state) => state.entities.profile);
-  let { user, error, success } = userProfile;
+  const userDetails = useSelector((state) => state.entities.profile);
+  const { loading, error, user } = userDetails;
+
+  const userUpdateProfile = useSelector((state) => state.entities.profile);
+  const { success } = userUpdateProfile.update;
 
   const userLogin = useSelector((state) => state.entities.auth);
   const { userInfo } = userLogin;
@@ -29,7 +36,8 @@ const ProfileScreen = () => {
     if (!userInfo) {
       window.location = "/login";
     } else {
-      if (!user.name) {
+      if (!user || !user.name || success) {
+        dispatch({ type: USER_UPDATE_RESET.type });
         dispatch(getUserDetails());
 
         setName(user.name);
