@@ -1,3 +1,3 @@
 # iShop
 
-Link ==> https://ishop-mern.herokuapp.com/
+Link ==> https://i-shop-2.herokuapp.com/
