@@ -22,7 +22,7 @@ app.get("/api/config/paypal", (req, res) =>
 //we have to make the uploads folder static, so it becomes accessible in the browser
 // __dirname points to the current root directory
 const __dirname = path.resolve();
-app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+app.use("/api/uploads", express.static(path.join(__dirname, "/uploads")));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/build")));
